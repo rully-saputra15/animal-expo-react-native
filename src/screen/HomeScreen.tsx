@@ -10,19 +10,26 @@ import {
   ScrollView,
   Text,
   VStack,
-  Wrap
+  Wrap,
+  FlatList, Center
 } from "native-base";
 import {colorDivider} from "../constants/colors";
 import {Animal, AnimalCategory} from "../interface";
+import LottieView from "lottie-react-native";
 
 interface HomeScreenProps {
   animalData: Animal[],
   animalCategory: AnimalCategory[];
+  isFetchingAnimalData: boolean;
   navigateToAnimalDetailScreen: (id: number) => void;
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = (
-  { animalCategory, animalData, navigateToAnimalDetailScreen
+  {
+    animalCategory,
+    animalData,
+    isFetchingAnimalData,
+    navigateToAnimalDetailScreen
   }) => {
   const renderHeader = (title: string) => (
     <PresenceTransition visible initial={{
@@ -35,7 +42,7 @@ const HomeScreen: React.FC<HomeScreenProps> = (
         duration: 500
       }
     }}>
-      <Box w={48} pl={5} key={title}>
+      <Box w={48} key={title}>
         <Text fontWeight={700} fontSize={32}>{title === "Animal" ? `${title} 🐵` : title}</Text>
         <Divider bgColor={{
           linearGradient: {
@@ -70,45 +77,41 @@ const HomeScreen: React.FC<HomeScreenProps> = (
       </HStack>
     );
   };
-  const renderAnimalCard = () => {
-    const animalCard: JSX.Element[] = [];
-
-    animalData.forEach((animal, index) => {
-      animalCard.push(
-        <PresenceTransition visible key={animal.id} initial={{
-          opacity: 0,
-          translateY: -20
-        }} animate={{
-          opacity: 1,
-          translateY: 0,
-          transition: {
-            duration: index * 500
-          }
-        }}>
-          <Pressable onPress={() => navigateToAnimalDetailScreen(animal.id)}>
-            <Box mr={3}
-                 borderRadius={10}
-                 shadow={5}>
-              <AspectRatio ratio={9 / 16} height={400}>
-                <Image src={animal.imageLink} alt={`image${index}`} resizeMode="cover" borderRadius={10}/>
-              </AspectRatio>
-              <Badge borderRadius={10}
-                     position="absolute"
-                     top={2}
-                     right={2}
-                     _text={{
-                       fontWeight: "bold"
-                     }}>
-                {animal.name}
-              </Badge>
-              {renderGroupBadgeAnimalCard(animal.type, animal.activeTime)}
-            </Box>
-          </Pressable>
-        </PresenceTransition>
-      );
-    });
-    return animalCard;
+  const renderAnimalCard = ({ item }: any) => {
+    return (
+      <PresenceTransition visible key={item.id} initial={{
+        opacity: 0,
+        translateY: -20
+      }} animate={{
+        opacity: 1,
+        translateY: 0,
+        transition: {
+          duration: 650
+        }
+      }}>
+        <Pressable onPress={() => navigateToAnimalDetailScreen(item.id)}>
+          <Box mr={3}
+               borderRadius={10}
+          >
+            <AspectRatio ratio={9 / 16} height={400}>
+              <Image src={item.imageLink} alt={`image${item.id}`} resizeMode="cover" borderRadius={10}/>
+            </AspectRatio>
+            <Badge borderRadius={10}
+                   position="absolute"
+                   top={2}
+                   right={2}
+                   _text={{
+                     fontWeight: "bold"
+                   }}>
+              {item.name}
+            </Badge>
+            {renderGroupBadgeAnimalCard(item.type, item.activeTime)}
+          </Box>
+        </Pressable>
+      </PresenceTransition>
+    );
   };
+
   const AnimalCategories = () => {
     let categoryCard: JSX.Element[] = [];
 
@@ -150,8 +153,7 @@ const HomeScreen: React.FC<HomeScreenProps> = (
       <Wrap key="category"
             flexDirection="row"
             w="100%"
-            pl={5}
-            justifyContent="space-between">
+            justifyContent="space-evenly">
         {categoryCard}
       </Wrap>
     );
@@ -162,19 +164,31 @@ const HomeScreen: React.FC<HomeScreenProps> = (
         alignItems="flex-start"
         flex={1}
         py={6}
+        pl={5}
         space={6}
         safeArea>
         {renderHeader("Animal")}
-        <ScrollView w="100%"
-                    px={5}
-                    pb={4}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}>
-          {renderAnimalCard()}
-        </ScrollView>
+        {
+          isFetchingAnimalData ?
+            <HStack w="100%" justifyContent="center" alignItems="center">
+              <LottieView autoPlay
+                          style={{ width: "40%" }}
+                          loop
+                          autoSize
+                          source={require("../assets/loading.json")}/>
+            </HStack>
+            :
+            <FlatList data={animalData}
+                      horizontal
+                      w="full"
+                      showsHorizontalScrollIndicator={false}
+                      renderItem={renderAnimalCard}
+                      keyExtractor={item => item.id.toString()}/>
+        }
         {renderHeader("Category")}
         <AnimalCategories/>
       </VStack>
+
     </ScrollView>
   );
 };

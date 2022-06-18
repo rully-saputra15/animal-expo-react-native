@@ -29,7 +29,7 @@ const AnimalDetailScreen: FC<AnimalDetailScreenProps> = ({ animalDetailData }) =
     subTitle?: string,
     value?: string) => (
     <Box borderRadius={10}
-         shadow={5}
+         mx={4}
          flexDirection="row"
          alignItems="center"
          justifyContent="flex-start"
@@ -42,7 +42,7 @@ const AnimalDetailScreen: FC<AnimalDetailScreenProps> = ({ animalDetailData }) =
          }}
          p={4}>
       {icon}
-      <VStack ml={4} w="80%">
+      <VStack pl={4} w="100%">
         {subTitle !== "" && (
           <>
             <Text fontWeight={300} fontSize={14} key="region">
@@ -66,7 +66,7 @@ const AnimalDetailScreen: FC<AnimalDetailScreenProps> = ({ animalDetailData }) =
     <ScrollView>
       <VStack flex={1}
               py={3}
-              px={4}
+              mx={5}
               alignItems="center"
               space={3}>
         <PresenceTransition visible initial={{
@@ -120,7 +120,7 @@ const AnimalDetailScreen: FC<AnimalDetailScreenProps> = ({ animalDetailData }) =
             duration: 570
           }
         }}>
-          <Wrap flexDirection="row" space={3}>
+          <HStack space={3}>
             {
               identityBadge("red", animalDetailData?.type)
             }
@@ -130,9 +130,9 @@ const AnimalDetailScreen: FC<AnimalDetailScreenProps> = ({ animalDetailData }) =
                 :
                 identityBadge("indigo", animalDetailData?.activeTime)
             }
-          </Wrap>
+          </HStack>
         </PresenceTransition>
-        <HStack justifyContent="space-evenly" width="100%">
+        <HStack justifyContent="space-between" width="full">
          <PresenceTransition visible initial={{
            opacity: 0,
            translateY: -20
@@ -145,7 +145,6 @@ const AnimalDetailScreen: FC<AnimalDetailScreenProps> = ({ animalDetailData }) =
          }}>
            <Box
              borderRadius={10}
-             shadow={5}
              flexDirection="row"
              alignItems="center"
              justifyContent="flex-start"
@@ -184,7 +183,6 @@ const AnimalDetailScreen: FC<AnimalDetailScreenProps> = ({ animalDetailData }) =
           }}>
             <Box
               borderRadius={10}
-              shadow={5}
               flexDirection="row"
               alignItems="center"
               justifyContent="flex-start"
