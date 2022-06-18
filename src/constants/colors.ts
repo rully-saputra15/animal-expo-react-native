@@ -1,0 +1,7 @@
+export const colorBoxFish = [ "#6DD5ED", "#2193B0"]
+export const colorBoxBird = ["#EACDA3", "#D6AE7B"]
+export const colorBoxInvertebrate = ["#EE9CA7", "#FFDDE1"]
+export const colorBoxAmphibian = ["#02AAB0", "#00CDAC"]
+export const colorBoxMammal = ["#DE6262", "#FFB88C"]
+export const colorBoxReptile = ["#56AB2F", "#A8E063"]
+export const colorDivider = ["#FFAFBD", "#FFC3A0"]
